@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <header class="topo">
+    <div class="logo-area">
+        <img src="logo.png" alt="FELCAR Gestão de Frotas">
+       
+       
+        <span></span>
+    </div>
+    <button onclick="logout()" style="float:right">Sair</button>
+
+    <meta charset="UTF-8">
+    <title>Sistema de Gestão de Viagens</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>Sistema de Gestão de Viagens</h1>
+</header>
+
+<section class="box">
+    <div class="box-header">
+        <h2>Cadastro de Motoristas</h2>
+        <button type="button" onclick="toggleMotoristas()" id="btnToggleMotorista">
+            Minimizar
+        </button>
+    </div>
+
+    <div id="conteudoMotoristas">
+        <!-- FORM MOTORISTA -->
+        <form id="formMotorista">
+            <input type="text" id="nomeMotorista" placeholder="Nome do Motorista" required>
+            <input type="text" id="telefoneMotorista" placeholder="Telefone" required>
+            <input type="text" id="cpfMotorista" placeholder="CPF" required>
+            <input type="date" id="nascimentoMotorista" required>
+            <input type="number" id="idadeMotorista" placeholder="Idade" readonly>
+            <input type="number" id="comissaoMotorista" placeholder="% Comissão" step="0.01" required>
+            <input type="text" id="pamcardMotorista" placeholder="Pamcard">
+            <button type="submit">Salvar Motorista</button>
+        </form>
+
+        <!-- TABELA -->
+        <table>
+            <thead>
+    <tr>
+        <th>Nome</th>
+        <th>Telefone</th>
+        <th>CPF</th>
+        <th>Idade</th>
+        <th>Comissão</th>
+        <th>Pamcard</th>
+        <th>Ações</th>
+    </tr>
+</thead>
+            <tbody id="listaMotoristas"></tbody>
+        </table>
+    </div>
+</section>
+<section class="box">
+    <div class="box-header">
+        <h2>Cadastro de Veículos</h2>
+        <button type="button" onclick="toggleVeiculos()" id="btnToggleVeiculos">
+            Minimizar
+        </button>
+    </div>
+
+    <div id="conteudoVeiculos">
+        <!-- FORM VEÍCULO -->
+        <form id="formVeiculo">
+            <input type="text" id="marcaVeiculo" placeholder="Marca" required>
+            <input type="text" id="modeloVeiculo" placeholder="Modelo" required>
+            <input type="text" id="placaVeiculo" placeholder="Placa" required>
+            <button type="submit">Salvar Veículo</button>
+        </form>
+
+        <!-- TABELA -->
+        <table>
+            <thead>
+    <tr>
+        <th>Marca</th>
+        <th>Modelo</th>
+        <th>Placa</th>
+        <th>Ações</th>
+    </tr>
+</thead>
+            <tbody id="listaVeiculos"></tbody>
+        </table>
+    </div>
+</section>
+
+<section>
+    <h2>Cadastrar Viagem</h2>
+    <form id="formViagem">
+        <input type="date" id="data" required>
+    <select id="motorista" required>
+    <option value="">Selecione o Motorista</option>
+</select>
+    <select id="placa">
+    <option value="">Selecione a Placa</option>
+</select>
+    <input type="text" id="origem" placeholder="Origem">
+    <input type="text" id="destino" placeholder="Destino">
+    <input type="number" id="kmInicial" placeholder="KM Inicial" required>
+<input type="number" id="kmFinal" placeholder="KM Final" required>
+
+<input type="number" id="pesoCarregado" placeholder="Peso Carregado (t)" step="0.01">
+<input type="number" id="valorPorTonelada" placeholder="R$ por Tonelada" step="0.01">
+
+<input type="number" id="descontoFrete" placeholder="Desconto do Frete (R$)" step="0.01">
+
+<input type="number" id="adiantamento" placeholder="Adiantamento (R$)" step="0.01">
+
+<input type="text" id="transportadora" placeholder="Transportadora">
+
+<input type="number" id="freteLiquido" placeholder="R$ Líquido do Frete" readonly>
+<input type="number" id="saldoFrete" placeholder="Saldo do Frete" readonly>
+<input type="number" id="comissao" placeholder="Comissão" readonly>
+
+
+    <!-- ESTADIA -->
+    <label>
+        <input type="checkbox" id="houveEstadia">
+        Houve estadia?
+    </label>
+
+    <input type="number" id="valorEstadia" placeholder="Valor da Estadia (R$)" step="0.01" style="display:none">
+
+    <input type="text" id="valorEstadia30" placeholder="30% da Estadia (R$)" readonly style="display:none">
+
+    <button type="submit">Cadastrar Viagem</button>
+    </form>
+</section>
+
+<section>
+    <h2>Viagens Cadastradas</h2>
+     <div style="margin-bottom: 10px;">
+        <label><strong>Filtrar por mês:</strong></label>
+        <input type="month" id="filtroMes">
+        <button type="button" onclick="limparFiltroMes()">Limpar</button>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Data</th>
+                <th>Motorista</th>
+                <th>Placa</th>
+                <th>Acertada</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="listaViagens"></tbody>
+    </table>
+</section>
+
+<section id="lancamentos" style="display:none">
+    <h2 id="tituloLancamentos"></h2>
+
+    <div class="tabs">
+        <button class="active" onclick="abrirAba('despesas', this)">Despesas</button>
+        <button onclick="abrirAba('abastecimentos', this)">Abastecimentos</button>
+        <button onclick="abrirAba('recebimentos', this)">Recebimentos</button>
+        <button onclick="abrirAba('pedagios', this)">Pedágios</button>
+        <button onclick="abrirAba('vales', this)">Vales</button>
+    </div>
+
+    <div id="despesas" class="tab-content active">
+        <form onsubmit="salvarLancamento(event, 'despesas')">
+    <input type="date">
+    <input type="text" placeholder="Descrição">
+    <input type="number" placeholder="Valor">
+    
+    <select>
+        <option value="PAGO">PAGO</option>
+        <option value="ASSINADO">ASSINADO</option>
+    </select>
+
+    <button>Salvar</button>
+</form>
+        <table>
+    <thead>
+        <tr>
+            <th>Data</th>
+            <th>Descrição</th>
+            <th>Valor</th>
+            <th>Forma de Pagamento</th>
+        </tr>
+    </thead>
+    <tbody id="listaDespesas"></tbody>
+</table>
+    </div>
+
+    <div id="abastecimentos" class="tab-content">
+        <form onsubmit="salvarLancamento(event, 'abastecimentos')">
+
+    <input type="date" required>
+
+    <input type="text" placeholder="Posto" required>
+
+    <input type="number" placeholder="KM Abastecimento" required>
+
+    <select required>
+        <option value="">Tipo</option>
+        <option value="ARLA">ARLA</option>
+        <option value="DIESEL">DIESEL</option>
+    </select>
+
+    <input type="number" id="litros" placeholder="Litros" step="0.01" required>
+
+    <input type="number" id="valorLitro" placeholder="R$ por Litro" step="0.01" required>
+
+    <!-- FORMA DE PAGAMENTO ANTES -->
+    <select required>
+        <option value="">Forma de Pagamento</option>
+        <option value="ASSINADO">ASSINADO</option>
+        <option value="PAGO">PAGO</option>
+    </select>
+
+    <!-- TOTAL POR ÚLTIMO -->
+    <input type="text" id="total" placeholder="Valor Total (R$)" readonly>
+
+    <button type="submit">Salvar Abastecimento</button>
+
+</form>
+
+        <table>
+    <thead>
+        <tr>
+            <th>Data</th>
+            <th>Posto</th>
+            <th>Km Abastecido</th>
+            <th>Tipo</th>
+            <th>Litros</th>
+            <th>R$ porLitro</th>
+            <th>Forma de Pagamento</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody id="listaAbastecimentos"></tbody>
+</table>
+    </div>
+
+    <div id="recebimentos" class="tab-content">
+    <form onsubmit="salvarLancamento(event, 'recebimentos')">
+
+        <input type="date" required>
+
+        <input type="number" placeholder="Valor" step="0.01" required>
+
+        <select id="tipoRecebimento" onchange="toggleCheque()" required>
+            <option value="">Tipo de Pagamento</option>
+            <option value="DINHEIRO">DINHEIRO</option>
+            <option value="CHEQUE">CHEQUE</option>
+        </select>
+
+        <input type="number" id="numeroCheque" placeholder="Nº do Cheque" style="display:none;">
+
+        <button type="submit">Salvar Recebimento</button>
+
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Valor</th>
+                <th>Tipo de Pagamento</th>
+                <th>Nº do Cheque</th>
+            </tr>
+        </thead>
+        <tbody id="listaRecebimentos"></tbody>
+    </table>
+</div>
+
+<div id="pedagios" class="tab-content">
+    <form onsubmit="salvarLancamento(event, 'pedagios')">
+
+        <input type="date" required>
+
+        <input type="number" placeholder="Valor" step="0.01" required>
+
+        <select required>
+            <option value="">Tipo de Pagamento</option>
+            <option value="DINHEIRO">DINHEIRO</option>
+            <option value="TAG">TAG</option>
+        </select>
+
+        <select required>
+            <option value="">Tipo de Pedágio</option>
+            <option value="PEDÁGIO">PEDÁGIO</option>
+            <option value="BALSA">BALSA</option>
+            <option value="CLASSIFICADOR">CLASSIFICADOR</option>
+        </select>
+
+        <button type="submit">Salvar Pedágio</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Valor</th>
+                <th>Pagamento</th>
+                <th>Tipo</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="listaPedagios"></tbody>
+    </table>
+</div>
+<div id="vales" class="tab-content">
+    <form onsubmit="salvarLancamento(event, 'vales')">
+        <input type="date" required>
+        <input type="number" placeholder="Valor do Vale" step="0.01" required>
+        <button type="submit">Salvar Vale</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Valor</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="listaVales"></tbody>
+    </table>
+</div>
+
+</section>
+<script src="auth.js"></script>
+<script src="script.js"></script>
+<button onclick="gerarRelatorio()">🖨️ Gerar Relatório para Impressão</button>
+</body>
+
+</html>

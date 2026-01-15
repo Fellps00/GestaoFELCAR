@@ -1,0 +1,102 @@
+/* ===============================
+   RESET
+================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ===============================
+   BODY
+================================ */
+body {
+    background: #F2F4F6;
+    height: 100vh;
+}
+
+/* ===============================
+   CONTAINER CENTRAL
+================================ */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+/* ===============================
+   BOX LOGIN
+================================ */
+.login-box {
+    background: #FFFFFF;
+    width: 360px;
+    padding: 35px 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    text-align: center;
+}
+
+/* ===============================
+   LOGO
+================================ */
+.logo-login {
+    max-width: 140px;
+    margin-bottom: 15px;
+}
+
+/* ===============================
+   TÍTULO
+================================ */
+.login-box h2 {
+    color: #033512;
+    margin-bottom: 20px;
+}
+
+/* ===============================
+   INPUTS
+================================ */
+.login-box input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    border: 1px solid #D0D5D9;
+    font-size: 14px;
+    color: #033512;
+    background: #FFFFFF;
+}
+
+.login-box input:focus {
+    outline: none;
+    border-color: #0B6B2D;
+}
+
+/* ===============================
+   BOTÃO
+================================ */
+.login-box button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: none;
+    background: #0B6B2D;
+    color: #FFFFFF;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.login-box button:hover {
+    background: #3FAE5A;
+}
+
+/* ===============================
+   RESPONSIVO
+================================ */
+@media (max-width: 480px) {
+    .login-box {
+        width: 90%;
+    }
+}
