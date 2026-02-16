@@ -710,10 +710,6 @@ if (viagemSelecionada.vales) {
 }
 
 
-const valorAdiantado = Number(viagemSelecionada.valorAdiantado || 0);
-
-const valorAReceber =
-    comissaoCompleta - valorAdiantado - totalVales;
 
     
     /* ================= MÉDIAS ================= */
@@ -771,24 +767,27 @@ const freteTotal =
 
 // ================= SOBRA =================
 const sobra = freteTotal - notas;
+// ================= VALOR ADIANTADO (COMISSÃO MOTORISTA) =================
+// cálculo: sobra - total de cheques
+const valorAdiantado = sobra - totalRecebido;
+// AGORA SIM pode calcular
+const valorAReceber =
+    comissaoCompleta - valorAdiantado - totalVales;
 
 
-
-    /* ================= RESUMO FINAL ================= */
-    const gastoMotorista =
+   /* ================= RESUMO FINAL ================= */
+const gastoMotorista =
     totalPagoDespesas +
     totalPagoAbastecimentos +
     totalPedagioDinheiro;
-    
 
-    const resultadoFinal =
+const resultadoFinal =
     totalRecebido -
     totalDespesas -
     totalAbastecimento -
     totalPedagios;
-   
 
-    html += `
+html += `
 <h2>Resumo Financeiro</h2>
 
 <p><strong>Frete Total:</strong>
@@ -808,35 +807,23 @@ R$ ${totalRecebido.toFixed(2)}
 </p>
 
 <p><strong>Valor Adiantado (Comissão):</strong>
+<span style="color:${valorAdiantado < 0 ? '#C0392B' : '#033512'}">
 R$ ${valorAdiantado.toFixed(2)}
+</span>
 </p>
-    
-    
-    
 
-    
 ${viagemSelecionada.estadia ? `
 <p><strong>Estadia:</strong> R$ ${valorEstadia.toFixed(2)}</p>
 <p><strong>30% da Estadia:</strong> R$ ${valorEstadia30.toFixed(2)}</p>
 ` : ""}
-;
 
-
-
-
-   
-   
-    <h2>Médias da Viagem</h2>
+<h2>Médias da Viagem</h2>
 <p><strong>KM Rodados:</strong> ${kmRodados} km</p>
 <p><strong>Litros Abastecidos (Diesel):</strong> ${litrosDiesel.toFixed(2)} L</p>
 <p><strong>Média:</strong> ${media.toFixed(2)} km/L</p>
+`;
 
-
-    <script>window.print()</script>
-    </body>
-    </html>
-    `;
-    html += `
+html += `
 <h2>Valores a Receber</h2>
 
 <p>
@@ -860,13 +847,18 @@ R$ ${valorAReceber.toFixed(2)}
 </p>
 `;
 
+/* FECHAMENTO DO HTML — TEM QUE FICAR POR ÚLTIMO */
+html += `
+<script>window.print()</script>
+</body>
+</html>
+`;
 
-    const janela = window.open("", "_blank");
-    janela.document.write(html);
-    janela.document.close();
+const janela = window.open("", "_blank");
+janela.document.write(html);
+janela.document.close();
+
 }
-
-
  /* ================= CADASTRO MOTORISTAS ================= */
 const nascimentoMotorista = document.getElementById("nascimentoMotorista");
 const idadeMotorista = document.getElementById("idadeMotorista");
@@ -899,7 +891,7 @@ document.getElementById("formMotorista").addEventListener("submit", e => {
         nascimento: nascimentoMotorista.value,
         idade: idadeMotorista.value,
         comissao: comissaoMotorista.value,
-        pamcard: pamcardMotorista.motorista
+        pamcard: pamcardMotorista.value
     });
 
     localStorage.setItem("motoristas", JSON.stringify(motoristas));
@@ -1112,5 +1104,3 @@ function carregarPlacasVeiculos() {
 document.addEventListener("DOMContentLoaded", () => {
     carregarPlacasVeiculos();
 });
-
-
