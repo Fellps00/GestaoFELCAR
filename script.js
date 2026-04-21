@@ -242,7 +242,10 @@ function abrirLancamentos(id) {
 function salvarLancamento(e, tipo) {
     e.preventDefault();
 
-    const valores = [...e.target.querySelectorAll("input, select")].map(i => i.value);
+    const valores = [...e.target.querySelectorAll("input, select")].map(i => {
+    let valor = i.value;
+    return valor.replace(",", ".");
+});
 
     if (lancamentoEmEdicao && lancamentoEmEdicao.tipo === tipo) {
         viagemSelecionada[tipo][lancamentoEmEdicao.index] = valores;
